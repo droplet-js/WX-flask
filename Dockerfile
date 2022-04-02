@@ -6,6 +6,40 @@ FROM alpine:3.13
 
 # 容器默认时区为UTC，如需使用上海时间请启用以下时区设置命令
 # RUN apk add tzdata && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && echo Asia/Shanghai > /etc/timezone
+MAINTAINER <mediapipe@google.com>
+
+RUN apt-get update
+RUN apt-get upgrade -y
+RUN apt-get install -y --no-install-recommends \
+        build-essential \
+        gcc-8 g++-8 \
+        ca-certificates \
+        curl \
+        ffmpeg \
+        git \
+        wget \
+        unzip \
+        python3-dev \
+        python3-opencv \
+        python3-pip \
+        libopencv-core-dev \
+        libopencv-highgui-dev \
+        libopencv-imgproc-dev \
+        libopencv-video-dev \
+        libopencv-calib3d-dev \
+        libopencv-features2d-dev \
+	libgtk-3-dev
+        software-properties-common && \
+    add-apt-repository -y ppa:openjdk-r/ppa && \
+    apt-get update && apt-get install -y openjdk-8-jdk && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN pip3 install --upgrade pip
+RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 100 --slave /usr/bin/g++ g++ /usr/bin/g++-8
+RUN pip3 install --upgrade setuptools
+RUN pip3 install wheel
+RUN pip3 install mediapipe
 
 # 使用 HTTPS 协议访问容器云调用证书安装
 RUN apk add ca-certificates
@@ -37,3 +71,11 @@ EXPOSE 80
 
 # 设定启动命令
 CMD ["python3", "run.py", "0.0.0.0", "80"]
+
+
+
+
+
+
+
+
