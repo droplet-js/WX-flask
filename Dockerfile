@@ -3,7 +3,7 @@
 
 # 选择基础镜像
 FROM alpine:3.13
-
+RUN pip install opencv-contrib-python
 RUN pip install mediapipe
 
 # 容器默认时区为UTC，如需使用上海时间请启用以下时区设置命令
