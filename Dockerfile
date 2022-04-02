@@ -2,8 +2,8 @@
 # 选择构建用基础镜像（选择原则：在包含所有用到的依赖前提下尽可能提及小）。如需更换，请到[dockerhub官方仓库](https://hub.docker.com/_/python?tab=tags)自行选择后替换。
 
 # 选择基础镜像
-#FROM alpine:3.13
-FROM ubuntu:latest
+FROM alpine:3.13
+#FROM ubuntu:latest
 
 # 容器默认时区为UTC，如需使用上海时间请启用以下时区设置命令
 # RUN apk add tzdata && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && echo Asia/Shanghai > /etc/timezone
@@ -15,37 +15,37 @@ COPY . /app
 # 设定当前的工作目录
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
-        build-essential \
-        ca-certificates \
-        curl \
-        git \
-        wget \
-        unzip \
-        python \
-        libopencv-core-dev \
-        libopencv-highgui-dev \
-        libopencv-imgproc-dev \
-        libopencv-video-dev \
-        software-properties-common && \
-    add-apt-repository -y ppa:openjdk-r/ppa && \
-    apt-get update && apt-get install -y openjdk-8-jdk && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+# RUN apt-get update && apt-get install -y --no-install-recommends \
+#         build-essential \
+#         ca-certificates \
+#         curl \
+#         git \
+#         wget \
+#         unzip \
+#         python \
+#         libopencv-core-dev \
+#         libopencv-highgui-dev \
+#         libopencv-imgproc-dev \
+#         libopencv-video-dev \
+#         software-properties-common && \
+#     add-apt-repository -y ppa:openjdk-r/ppa && \
+#     apt-get update && apt-get install -y openjdk-8-jdk && \
+#     apt-get clean && \
+#     rm -rf /var/lib/apt/lists/*
 
-RUN pip install --upgrade setuptools
-RUN pip install future
+# RUN pip install --upgrade setuptools
+# RUN pip install future
 RUN pip install mediapipe
 
 # Install bazel
-ARG BAZEL_VERSION=0.26.1
-RUN mkdir /bazel && \
-    wget --no-check-certificate -O /bazel/installer.sh "https://github.com/bazelbuild/bazel/releases/download/${BAZEL_VERSION}/b\
-azel-${BAZEL_VERSION}-installer-linux-x86_64.sh" && \
-    wget --no-check-certificate -O  /bazel/LICENSE.txt "https://raw.githubusercontent.com/bazelbuild/bazel/master/LICENSE" && \
-    chmod +x /bazel/installer.sh && \
-    /bazel/installer.sh  && \
-    rm -f /bazel/installer.sh
+# ARG BAZEL_VERSION=0.26.1
+# RUN mkdir /bazel && \
+#     wget --no-check-certificate -O /bazel/installer.sh "https://github.com/bazelbuild/bazel/releases/download/${BAZEL_VERSION}/b\
+# azel-${BAZEL_VERSION}-installer-linux-x86_64.sh" && \
+#     wget --no-check-certificate -O  /bazel/LICENSE.txt "https://raw.githubusercontent.com/bazelbuild/bazel/master/LICENSE" && \
+#     chmod +x /bazel/installer.sh && \
+#     /bazel/installer.sh  && \
+#     rm -f /bazel/installer.sh
 
 
 # 使用 HTTPS 协议访问容器云调用证书安装
