@@ -8,38 +8,39 @@ FROM alpine:3.13
 # RUN apk add tzdata && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && echo Asia/Shanghai > /etc/timezone
 MAINTAINER <mediapipe@google.com>
 
-RUN apt-get update
-RUN apt-get upgrade -y
-RUN apt-get install -y --no-install-recommends \
+RUN apt-get update && apt-get install -y --no-install-recommends \
         build-essential \
-        gcc-8 g++-8 \
         ca-certificates \
         curl \
-        ffmpeg \
         git \
         wget \
         unzip \
-        python3-dev \
-        python3-opencv \
-        python3-pip \
+        python \
+        python-pip \
         libopencv-core-dev \
         libopencv-highgui-dev \
         libopencv-imgproc-dev \
         libopencv-video-dev \
-        libopencv-calib3d-dev \
-        libopencv-features2d-dev \
-	    libgtk-3-dev \ 
         software-properties-common && \
     add-apt-repository -y ppa:openjdk-r/ppa && \
     apt-get update && apt-get install -y openjdk-8-jdk && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-RUN pip3 install --upgrade pip
-RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 100 --slave /usr/bin/g++ g++ /usr/bin/g++-8
-RUN pip3 install --upgrade setuptools
-RUN pip3 install wheel
+RUN pip install --upgrade setuptools
+RUN pip install future
 RUN pip3 install mediapipe
+
+# Install bazel
+ARG BAZEL_VERSION=0.26.1
+RUN mkdir /bazel && \
+    wget --no-check-certificate -O /bazel/installer.sh "https://github.com/bazelbuild/bazel/releases/download/${BAZEL_VERSION}/b\
+azel-${BAZEL_VERSION}-installer-linux-x86_64.sh" && \
+    wget --no-check-certificate -O  /bazel/LICENSE.txt "https://raw.githubusercontent.com/bazelbuild/bazel/master/LICENSE" && \
+    chmod +x /bazel/installer.sh && \
+    /bazel/installer.sh  && \
+    rm -f /bazel/installer.sh
+
 
 # 使用 HTTPS 协议访问容器云调用证书安装
 RUN apk add ca-certificates
@@ -59,7 +60,7 @@ WORKDIR /app
 
 # 安装依赖到指定的/install文件夹
 # 选用国内镜像源以提高下载速度
-RUN pip install mediapipe-0.8.3.1-cp37-cp37m-manylinux2014_x86_64.whl
+#RUN pip install mediapipe-0.8.3.1-cp37-cp37m-manylinux2014_x86_64.whl
 RUN pip config set global.index-url http://mirrors.cloud.tencent.com/pypi/simple \
 && pip config set global.trusted-host mirrors.cloud.tencent.com \
 && pip install --upgrade pip \
