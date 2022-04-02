@@ -35,7 +35,7 @@ WORKDIR /app
 
 # RUN pip install --upgrade setuptools
 # RUN pip install future
-RUN pip install mediapipe
+
 
 # Install bazel
 # ARG BAZEL_VERSION=0.26.1
@@ -63,6 +63,7 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.tencent.com/g' /etc/apk/repositorie
 # 安装依赖到指定的/install文件夹
 # 选用国内镜像源以提高下载速度
 #RUN pip install mediapipe-0.8.3.1-cp37-cp37m-manylinux2014_x86_64.whl
+RUN pip install mediapipe
 RUN pip config set global.index-url http://mirrors.cloud.tencent.com/pypi/simple \
 && pip config set global.trusted-host mirrors.cloud.tencent.com \
 && pip install --upgrade pip \
