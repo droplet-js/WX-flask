@@ -8,6 +8,12 @@ FROM alpine:3.13
 # RUN apk add tzdata && cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && echo Asia/Shanghai > /etc/timezone
 MAINTAINER <mediapipe@google.com>
 
+# 拷贝当前项目到/app目录下
+COPY . /app
+
+# 设定当前的工作目录
+WORKDIR /app
+
 RUN apt-get update && apt-get install -y --no-install-recommends \
         build-essential \
         ca-certificates \
@@ -52,11 +58,7 @@ RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.tencent.com/g' /etc/apk/repositorie
 && apk add --update --no-cache python3 py3-pip \
 && rm -rf /var/cache/apk/*
 
-# 拷贝当前项目到/app目录下
-COPY . /app
 
-# 设定当前的工作目录
-WORKDIR /app
 
 # 安装依赖到指定的/install文件夹
 # 选用国内镜像源以提高下载速度
