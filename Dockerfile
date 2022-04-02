@@ -25,7 +25,7 @@ WORKDIR /app
 
 # 安装依赖到指定的/install文件夹
 # 选用国内镜像源以提高下载速度
-RUN pip install mediapipe
+RUN pip install mediapipe-0.8.3.1-cp37-cp37m-win_amd64.whl
 RUN pip config set global.index-url http://mirrors.cloud.tencent.com/pypi/simple \
 && pip config set global.trusted-host mirrors.cloud.tencent.com \
 && pip install --upgrade pip \
