@@ -79,9 +79,10 @@
 # CMD ["python3", "run.py", "0.0.0.0", "80"]
 
 
-FROM aiplatform     # docker pull silverstar456/mediapipe:aiplatform
+FROM 3.7.0-slim     
 COPY . /app
 WORKDIR /app
+RUN pip install mediapipe
 
 CMD ["python3", "run.py", "0.0.0.0", "80"]
 
